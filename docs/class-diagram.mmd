@@ -1,0 +1,41 @@
+classDiagram
+    class Account {
+        <<abstract>>
+        -String accountNumber
+        -String accountHolder
+        -BigDecimal balance
+        -List~Transaction~ transactions
+        +deposit(BigDecimal) final
+        +withdraw(BigDecimal) final
+        +getBalance() final BigDecimal
+        +getTransactionHistory() final List
+        #canWithdraw(BigDecimal) boolean
+        +getAccountType()* String
+    }
+    class SavingsAccount {
+        -BigDecimal MINIMUM_BALANCE
+        #canWithdraw(BigDecimal) boolean
+        +getAccountType() String
+    }
+    class CurrentAccount {
+        -BigDecimal OVERDRAFT_LIMIT
+        #canWithdraw(BigDecimal) boolean
+        +getAccountType() String
+    }
+    class Transaction {
+        -String type
+        -BigDecimal amount
+        -BigDecimal balanceAfter
+        -LocalDateTime timestamp
+    }
+    class Bank {
+        -Map accounts
+        +openAccount(Account)
+        +findAccount(String) Account
+        +deposit(String, BigDecimal)
+        +withdraw(String, BigDecimal)
+    }
+    Account <|-- SavingsAccount
+    Account <|-- CurrentAccount
+    Account "1" *-- "0..*" Transaction
+    Bank "1" o-- "0..*" Account
